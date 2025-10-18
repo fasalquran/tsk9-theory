@@ -14,3 +14,245 @@ function run() {
      `Kuadrat dari ${n} = ${sq}, Digital Root: ${dr}`;
 }
 </script>
+
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator TSK9 - Digital Root Kuadrat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .calculator {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: border-color 0.3s;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.02);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .result-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .result-label {
+            color: #666;
+            font-weight: 600;
+        }
+        .result-value {
+            font-size: 24px;
+            color: #764ba2;
+            font-weight: bold;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            border-radius: 5px;
+        }
+        .info h3 {
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+        .info p {
+            color: #555;
+            line-height: 1.6;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #764ba2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>🧮 Kalkulator TSK9</h1>
+        <p style="text-align:center; color:#666; margin-bottom:20px;">
+            Digital Root dari Kuadrat Angka
+        </p>
+        
+        <div class="input-group">
+            <label for="number">Masukkan Angka:</label>
+            <input type="number" id="number" placeholder="Contoh: 7" min="1">
+        </div>
+        
+        <button onclick="calculate()">Hitung Digital Root</button>
+        
+        <div id="result" class="result">
+            <div class="result-item">
+                <span class="result-label">Angka Input:</span>
+                <span class="result-value" id="inputValue">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Kuadrat:</span>
+                <span class="result-value" id="squareValue">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Digital Root:</span>
+                <span class="result-value" id="digitalRoot">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Proses:</span>
+                <span class="result-value" id="process" style="font-size:14px;">-</span>
+            </div>
+        </div>
+        
+        <div class="info">
+            <h3>ℹ️ Cara Kerja:</h3>
+            <p>
+                1. Masukkan angka → dikuadratkan<br>
+                2. Hasil kuadrat → dijumlahkan digit-digitnya<br>
+                3. Jika hasil > 9, ulangi penjumlahan<br>
+                4. Hasil akhir = Digital Root (1-9)
+            </p>
+        </div>
+        
+        <div class="back-link">
+            <a href="index.html">← Kembali ke Menu Utama</a>
+        </div>
+    </div>
+    
+    <script>
+        function digitalRoot(n) {
+            if (n === 0) return 0;
+            return 1 + ((n - 1) % 9);
+        }
+        
+        function showProcess(n) {
+            let process = [];
+            let current = n;
+            
+            while (current > 9) {
+                let digits = current.toString().split('').map(Number);
+                let sum = digits.reduce((a, b) => a + b, 0);
+                process.push(`${digits.join('+')} = ${sum}`);
+                current = sum;
+            }
+            
+            return process.length > 0 ? process.join(' → ') : `${n} (single digit)`;
+        }
+        
+        function calculate() {
+            const input = document.getElementById('number').value;
+            
+            if (!input || input < 1) {
+                alert('Masukkan angka positif!');
+                return;
+            }
+            
+            const num = parseInt(input);
+            const square = num * num;
+            const dr = digitalRoot(square);
+            const process = showProcess(square);
+            
+            document.getElementById('inputValue').textContent = num;
+            document.getElementById('squareValue').textContent = `${num}² = ${square}`;
+            document.getElementById('digitalRoot').textContent = dr;
+            document.getElementById('process').textContent = process;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.classList.add('show');
+        }
+        
+        // Enter key support
+        document.getElementById('number').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
