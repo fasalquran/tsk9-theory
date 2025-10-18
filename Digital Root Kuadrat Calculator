@@ -1,0 +1,16 @@
+<h2>Digital Root Kuadrat Calculator</h2>
+<input id="n" placeholder="Masukkan angka">
+<button onclick="run()">Hitung</button>
+<p id="out"></p>
+<script>
+function run() {
+   let n = parseInt(document.getElementById('n').value);
+   let sq = n * n;
+   let dr = sq;
+   while (dr > 9) {
+     dr = dr.toString().split('').reduce((a,b) => +a + +b, 0);
+   }
+   document.getElementById("out").innerText = 
+     `Kuadrat dari ${n} = ${sq}, Digital Root: ${dr}`;
+}
+</script>
